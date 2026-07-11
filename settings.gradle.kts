@@ -1,0 +1,1 @@
+rootProject.name = "HW16-SQL"
