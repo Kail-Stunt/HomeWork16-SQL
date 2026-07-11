@@ -1,8 +1,8 @@
 package ru.hogwarts.school.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
+import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.List;
@@ -47,5 +47,17 @@ public class FacultyService {
         return facultyRepository.findAll().stream()
                 .filter(f -> f.getColor().equalsIgnoreCase(color))
                 .toList();
+    }
+
+    public List<Faculty> searchFacultiesByNameOrColorIgnoreCase(String query) {
+        String lowerCaseQuery = query.toLowerCase();
+        return facultyRepository.findAll().stream().filter(f->f.getName().toLowerCase().contains(lowerCaseQuery)||
+                f.getColor().toLowerCase().contains(lowerCaseQuery)).toList();
+    }
+
+    public List<Student> getStudentsByFaculty(Long facultyId) {
+        Faculty faculty = facultyRepository.findById(facultyId)
+                .orElseThrow(() -> new RuntimeException("Faculty not found with id: " + facultyId));
+        return faculty.getStudents(); // This will trigger lazy loading
     }
 }
