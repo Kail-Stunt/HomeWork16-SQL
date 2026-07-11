@@ -1,9 +1,10 @@
 package ru.hogwarts.school.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
 import ru.hogwarts.school.repository.StudentRepository;
+import ru.hogwarts.school.repository.FacultyRepository;
 
 import java.util.List;
 
@@ -11,9 +12,11 @@ import java.util.List;
 public class StudentService {
     //@Autowired
     private final StudentRepository studentRepository;
+    private final FacultyRepository facultyRepository;
 
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository, FacultyRepository facultyRepository) {
         this.studentRepository = studentRepository;
+        this.facultyRepository = facultyRepository;
     }
 
     public Student createStudent(Student student) {
@@ -43,7 +46,7 @@ public class StudentService {
                 .toList();
     }
 
-    public List<Student> findStudentsByAgeRange(int minAge, int maxAge) {
+    public List<Student> findByAgeBetween(int minAge, int maxAge) {
         return studentRepository.findAll().stream()
                 .filter(s -> s.getAge() >= minAge && s.getAge() <= maxAge)
                 .toList();
@@ -53,5 +56,26 @@ public class StudentService {
         return studentRepository.findAll().stream()
                 .filter(s -> s.getName().equalsIgnoreCase(name))
                 .toList();
+    }
+
+    /*public Faculty getFacultyByStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+        return student.getFaculty();
+    }*/
+
+    public Faculty getFacultyByStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
+        return student.getFaculty();  //Hibernate Lazy Loading сработает здесь
+    }
+
+    public Student assignFacultyToStudent(Long studentId, Long facultyId) {
+        Student student = studentRepository.findById(studentId)
+                .orElseThrow(() -> new RuntimeException("Student not found"));
+        Faculty faculty = facultyRepository.findById(facultyId)
+                .orElseThrow(() -> new RuntimeException("Faculty not found"));
+        student.setFaculty(faculty);
+        return studentRepository.save(student);
     }
 }
