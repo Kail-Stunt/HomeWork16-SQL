@@ -46,6 +46,9 @@ select * from students order by age;]]></console>
     <last-used-operator value="EQUAL" />
     <filters />
   </component>
+  <component name="DBNavigator.Project.ScriptExecutionManager" clear-outputs="true">
+    <recently-used-interfaces />
+  </component>
   <component name="DBNavigator.Project.Settings">
     <connections>
       <connection id="0f7fde7d-4778-4cea-a90f-e8b5f618ba88" active="true" signed="true">
