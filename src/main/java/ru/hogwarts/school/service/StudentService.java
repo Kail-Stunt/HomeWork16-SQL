@@ -58,11 +58,6 @@ public class StudentService {
                 .toList();
     }
 
-    /*public Faculty getFacultyByStudent(Long studentId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
-        return student.getFaculty();
-    }*/
 
     public Faculty getFacultyByStudent(Long studentId) {
         Student student = studentRepository.findById(studentId)
@@ -77,5 +72,17 @@ public class StudentService {
                 .orElseThrow(() -> new RuntimeException("Faculty not found"));
         student.setFaculty(faculty);
         return studentRepository.save(student);
+    }
+
+    public Integer countAllStudents() {
+        return studentRepository.findAllStudents();
+    }
+
+    public Double getAverageAge() {
+        return studentRepository.findAvgAge();
+    }
+
+    public List<Student> findLastFiveStudents() {
+        return studentRepository.findLastFive();
     }
 }
