@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        https://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <changeSet id="1" author="student">
+        <createTable tableName="faculty">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="color" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="2" author="student">
+        <createTable tableName="students">
+            <column name="id" type="BIGSERIAL">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="age" type="INT" defaultValue="20">
+                <constraints nullable="false"/>
+            </column>
+            <column name="faculty_id" type="BIGINT">
+                <constraints nullable="true"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="3" author="student">
+        <addForeignKeyConstraint
+                baseTableName="students"
+                baseColumnName="faculty_id"
+                referencedTableName="faculty"
+                referencedColumnName="id"
+                constraintName="fk_students_faculty"/>
+    </changeSet>
+
+    <changeSet id="4" author="student">
+        <createIndex indexName="idx_student_name" tableName="students">
+            <column name="name" type="VARCHAR(255)"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="5" author="student">
+        <createIndex indexName="idx_faculty_name_color" tableName="faculty">
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="color" type="VARCHAR(255)"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
