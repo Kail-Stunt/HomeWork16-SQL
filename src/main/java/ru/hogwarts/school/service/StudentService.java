@@ -1,5 +1,7 @@
 package ru.hogwarts.school.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import ru.hogwarts.school.model.Faculty;
 import ru.hogwarts.school.model.Student;
@@ -10,7 +12,8 @@ import java.util.List;
 
 @Service
 public class StudentService {
-    //@Autowired
+    private static final Logger log = LoggerFactory.getLogger(StudentService.class);
+
     private final StudentRepository studentRepository;
     private final FacultyRepository facultyRepository;
 
@@ -20,57 +23,61 @@ public class StudentService {
     }
 
     public Student createStudent(Student student) {
+        log.info("Вызван метод createStudent");
         return studentRepository.save(student);
     }
 
     public Student getStudent(Long id) {
+        log.info("Вызван метод getStudent");
         return studentRepository.findById(id).orElse(null);
     }
 
     public List<Student> getAllStudents() {
+        log.info("Вызван метод getAllStudents");
         return studentRepository.findAll();
     }
 
     public Student updateStudent(Student student) {
+        log.info("Вызван метод updateStudent");
         return studentRepository.save(student);
     }
 
     public Student deleteStudent(Long id) {
+        log.info("Вызван метод deleteStudent");
         studentRepository.deleteById(id);
         return null;
     }
 
     public List<Student> findStudentsByAge(int age) {
+        log.info("Вызван метод findStudentsByAge");
         return studentRepository.findAll().stream()
                 .filter(s -> s.getAge() == age)
                 .toList();
     }
 
     public List<Student> findByAgeBetween(int minAge, int maxAge) {
+        log.info("Вызван метод findByAgeBetween");
         return studentRepository.findAll().stream()
                 .filter(s -> s.getAge() >= minAge && s.getAge() <= maxAge)
                 .toList();
     }
 
     public List<Student> findStudentsByName(String name) {
+        log.info("Вызван метод findStudentsByName");
         return studentRepository.findAll().stream()
                 .filter(s -> s.getName().equalsIgnoreCase(name))
                 .toList();
     }
 
-    /*public Faculty getFacultyByStudent(Long studentId) {
+    public Faculty getFacultyByStudent(Long studentId) {
+        log.info("Вызван метод getFacultyByStudent");
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
         return student.getFaculty();
-    }*/
-
-    public Faculty getFacultyByStudent(Long studentId) {
-        Student student = studentRepository.findById(studentId)
-                .orElseThrow(() -> new RuntimeException("Student not found with id: " + studentId));
-        return student.getFaculty();  //Hibernate Lazy Loading сработает здесь
     }
 
     public Student assignFacultyToStudent(Long studentId, Long facultyId) {
+        log.info("Вызван метод assignFacultyToStudent");
         Student student = studentRepository.findById(studentId)
                 .orElseThrow(() -> new RuntimeException("Student not found"));
         Faculty faculty = facultyRepository.findById(facultyId)
