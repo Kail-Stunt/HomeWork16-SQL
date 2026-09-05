@@ -85,4 +85,25 @@ public class StudentService {
         student.setFaculty(faculty);
         return studentRepository.save(student);
     }
+
+    public List<String> findNamesStartingWithA() {
+        log.info("Вызван метод findNamesStartingWithA");
+        return studentRepository.findByNameStartingWith("A").stream()
+                .map(Student::getName)
+                .map(String::toUpperCase)
+                .sorted()
+                .toList();
+    }
+
+    public Double getAverageAge() {
+        log.info("Вызван метод getAverageAge");
+        List<Student> students = studentRepository.findAll();
+        if (students.isEmpty()) {
+            return 0.0;
+        }
+        return students.stream()
+                .mapToInt(Student::getAge)
+                .average()
+                .orElse(0.0);
+    }
 }
